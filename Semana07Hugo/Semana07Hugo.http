@@ -1,0 +1,33 @@
+@Semana07Hugo_HostAddress = http://localhost:5283
+@Role = Admin
+
+### Swagger document
+GET {{Semana07Hugo_HostAddress}}/swagger/v1/swagger.json
+Accept: application/json
+
+### Request without the required role (expected 403)
+GET {{Semana07Hugo_HostAddress}}/api/products/error-test
+
+### Create a valid product (expected 200)
+POST {{Semana07Hugo_HostAddress}}/api/products
+Role: {{Role}}
+Content-Type: application/json
+
+{
+  "name": "Teclado",
+  "price": 25.50,
+  "description": "USB"
+}
+
+### Missing required price (expected 400)
+POST {{Semana07Hugo_HostAddress}}/api/products
+Role: {{Role}}
+Content-Type: application/json
+
+{
+  "name": "Mouse"
+}
+
+### Trigger global error handling (expected 500)
+GET {{Semana07Hugo_HostAddress}}/api/products/error-test
+Role: {{Role}}
